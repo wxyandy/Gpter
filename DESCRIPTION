@@ -1,7 +1,10 @@
 Package: gpter
 Title: ChatGPT R API
 Version: 0.1.0
-Authors@R: person("Andy Wen", "wxy999qx@gmail.com", role = c("aut", "cre"))
+Date: 2023-04-16
+Authors@R: person("Andy Wen", "Developer", email = "wxy999qx@gmail.com", role = c("aut", "cre"))
+Author: Andy Wen Developer [aut, cre]
+Maintainer: Andy Wen Developer <wxy999qx@gmail.com>
 Description: An R package for interacting with the ChatGPT API and executing code snippets.
 License: MIT + file LICENSE
 Encoding: UTF-8
