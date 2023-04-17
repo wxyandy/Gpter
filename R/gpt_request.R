@@ -35,7 +35,7 @@ gpt_request <- function(prompt, stop_sequence = NULL) {
   # Set the request body
   request_body <- list(
     prompt = code_prompt,
-    max_tokens = 50,
+    max_tokens = maxTok,
     n = 1,
     temperature = 1
   )

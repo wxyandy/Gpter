@@ -4,7 +4,7 @@
 \alias{iniSet}
 \title{Set the ChatGPT API key for the package}
 \usage{
-iniSet(api_key)
+iniSet(api_key, maxT = 150)
 }
 \arguments{
 \item{api_key}{Your ChatGPT API key}
