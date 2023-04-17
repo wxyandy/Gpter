@@ -10,7 +10,8 @@
 #'   iniSet(api_key)
 #' }
 iniSet <- function(api_key) {
-  gpter_config$api_key <<- api_key
-  cat("API key set successfully.\n")
-  invisible(NULL)
+  if (!is.character(api_key) || nchar(api_key) == 0) {
+    stop("Invalid API key. Please provide a valid API key as a string.")
+  }
+  assign("api_key", api_key, envir = .GlobalEnv)
 }

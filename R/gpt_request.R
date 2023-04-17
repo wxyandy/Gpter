@@ -1,54 +1,46 @@
-library(httr)
-library(jsonlite)
-
-#' Send a prompt to the ChatGPT API and get a response
-#'
-#' @param prompt The text prompt to send to the ChatGPT API
-#' @return A character string containing the generated response
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#'   iniSet("your_api_key")
-#'   prompt <- "What is the capital of France?"
-#'   response <- gpt_request(prompt)
-#'   cat(response)
-#' }
-gpt_request <- function(prompt) {
-  # Get the API key from the config
+gpt_request <- function(prompt, stop_sequence = NULL) {
+  # Get the API key
   api_key <- get_api_key()
 
-  # Define the API endpoint and parameters
-  url <- "https://api.openai.com/v1/engines/davinci-codex/completions"
-  headers <- add_headers(
+  # Set the API endpoint and model
+  api_url <- "https://api.openai.com/v1/engines/text-davinci-002/completions"
+
+  # Set the request headers
+  headers <- httr::add_headers(
     "Content-Type" = "application/json",
     "Authorization" = paste("Bearer", api_key)
   )
 
-  # Build the JSON payload
-  payload <- toJSON(
-    list(
-      prompt = prompt,
-      max_tokens = 100,
-      n = 1,
-      stop = NULL,
-      temperature = 0.7
-    ),
-    auto_unbox = TRUE
+  # Add a prefix to the prompt
+  code_prompt <- paste("Write R code to ", prompt)
+
+  # Set the request body
+  request_body <- list(
+    prompt = code_prompt,
+    max_tokens = 50,
+    n = 1,
+    temperature = 1
   )
 
-  # Send the request to the ChatGPT API
-  response <- POST(url, headers, body = payload)
-
-  # Check for errors in the response
-  if (http_error(response)) {
-    stop("An error occurred while communicating with the ChatGPT API:\n",
-         content(response, as = "text", encoding = "UTF-8"))
+  # Add the 'stop' parameter only if it's not NULL
+  if (!is.null(stop_sequence)) {
+    request_body$stop <- stop_sequence
   }
 
-  # Parse the response JSON and extract the generated text
-  response_content <- content(response, as = "parsed", encoding = "UTF-8")
-  generated_text <- response_content$choices[[1]]$text
+  body <- jsonlite::toJSON(request_body, auto_unbox = TRUE)
 
-  return(generated_text)
+  # Make the API request
+  response <- httr::POST(api_url, headers, body = body)
+
+  # Check if the request was successful
+  if (httr::http_status(response)$category != "Success") {
+    stop(
+      "An error occurred while communicating with the ChatGPT API:\n",
+      httr::content(response, "text", encoding = "UTF-8")
+    )
+  }
+
+  # Extract and return the generated text
+  content <- httr::content(response, "parsed")
+  return(content$choices[[1]]$text)
 }
