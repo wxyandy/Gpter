@@ -1,3 +1,17 @@
+#' Send a prompt to the ChatGPT API and get a response
+#'
+#' @param prompt The text prompt to send to the ChatGPT API
+#' @param stop_sequence null value(No use)
+#' @return the result of the code
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   iniSet("your_api_key")
+#'   prompt <- "What is the capital of France?"
+#'   gpter_run(prompt)
+#' }
+#'
 gpter_run <- function(prompt, stop_sequence = NULL) {
   # Get the R code using the gpt_request() function
   code <- gpt_request(prompt, stop_sequence)

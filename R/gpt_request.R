@@ -1,3 +1,21 @@
+library(httr)
+library(jsonlite)
+
+#' Send a prompt to the ChatGPT API and get a response
+#'
+#' @param prompt The text prompt to send to the ChatGPT API
+#' @param stop_sequence null value(No use)
+#' @return A character string containing the generated response
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#'   iniSet("your_api_key")
+#'   prompt <- "What is the capital of France?"
+#'   response <- gpt_request(prompt)
+#'   cat(response)
+#' }
+#'
 gpt_request <- function(prompt, stop_sequence = NULL) {
   # Get the API key
   api_key <- get_api_key()
