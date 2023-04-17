@@ -1,8 +1,9 @@
 library(httr)
 library(jsonlite)
 
-gpt_request <- function(prompt, api_key) {
+gpt_request <- function(prompt) {
   url <- "https://api.openai.com/v1/engines/davinci-codex/completions"
+  api_key <- get_api_key()
   headers <- add_headers(
     "Content-Type" = "application/json",
     "Authorization" = paste("Bearer", api_key)
